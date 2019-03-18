@@ -14,14 +14,6 @@ namespace DotNextNN.Core.Neural.Layers
         {
         }
 
-        protected DerivativeLayerBase(LayerBase other) : base(other)
-        {
-        }
-
-        protected DerivativeLayerBase(BinaryReader reader) : base(reader)
-        {
-        }
-
         /// <summary>
         ///     Get value of layer output derrivative with respect to input (dO/dI of [batch]). Single precision version.
         /// </summary>

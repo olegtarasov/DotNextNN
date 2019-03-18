@@ -3,18 +3,11 @@ using DotNextNN.Core.Neural;
 
 namespace DotNextNN.Core.Optimizers
 {
-	public abstract class OptimizerBase : IOptimizer
+	public abstract class OptimizerBase
 	{
-	    protected IntPtr GpuOptimizerPtr = IntPtr.Zero;
-
-        protected OptimizerBase(float learningRate)
+	    protected OptimizerBase(float learningRate)
 	    {
 	        LearningRate = learningRate;
-	    }
-
-	    protected OptimizerBase(OptimizerBase other)
-	    {
-	        LearningRate = other.LearningRate;
 	    }
 
 	    public float LearningRate { get; set; }

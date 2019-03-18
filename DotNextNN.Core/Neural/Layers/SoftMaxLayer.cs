@@ -11,11 +11,6 @@ namespace DotNextNN.Core.Neural.Layers
     {
         private readonly int _size;
 
-        private SoftMaxLayer(SoftMaxLayer other) : base(other)
-        {
-            _size = other._size;
-        }
-
         public SoftMaxLayer(int size)
         {
             _size = size;
@@ -23,19 +18,10 @@ namespace DotNextNN.Core.Neural.Layers
             ErrorFunction = new CrossEntropyError();
         }
 
-        public SoftMaxLayer(BinaryReader reader) : base(reader)
-        {
-            _size = reader.ReadInt32();
-        }
-
+        
         public override int InputSize => _size;
         public override int OutputSize => _size;
-        public override int TotalParamCount => 0;
 
-        public override LayerBase Clone()
-        {
-            return new SoftMaxLayer(this);
-        }
 
         public override void Optimize(OptimizerBase optimizer)
         {
@@ -55,24 +41,6 @@ namespace DotNextNN.Core.Neural.Layers
         protected override float DerivativeS(Matrix input, Matrix output, int batch, int i, int o)
         {
             return i == o ? output[i, batch] * (1 - output[o, batch]) : -output[i, batch] * output[o, batch];
-        }
-
-        public override void ResetMemory()
-        {
-        }
-
-        public override void ResetOptimizer()
-        {
-        }
-
-        public override void InitSequence()
-        {
-            Output.Clear();
-            Input.Clear();
-        }
-
-        public override void ClampGrads(float limit)
-        {
         }
 
         public override void ClearGradients()

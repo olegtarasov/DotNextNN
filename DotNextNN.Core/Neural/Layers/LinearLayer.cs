@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using DotNextNN.Core.Neural.ErrorFunctions;
-using DotNextNN.Core.Neural.Initializers;
 using DotNextNN.Core.Optimizers;
 
 namespace DotNextNN.Core.Neural.Layers
@@ -12,59 +11,14 @@ namespace DotNextNN.Core.Neural.Layers
         private NeuroWeight _bias;
         private NeuroWeight _weights;
 
-        private LinearLayer(LinearLayer other) : base(other)
+        public LinearLayer(int xSize, int ySize)
         {
-            _weights = other._weights.Clone();
-            _bias = other._bias.Clone();
-
-            RegisterWeights(_bias, _weights);
-        }
-
-        public LinearLayer(int xSize, int ySize) : this(xSize, ySize, new RandomMatrixInitializer())
-        {
-        }
-
-        public LinearLayer(int xSize, int ySize, IMatrixInitializer matrixInitializer)
-        {
-            _weights = new NeuroWeight(matrixInitializer.CreateMatrix(ySize, xSize));
-            _bias = new NeuroWeight(matrixInitializer.CreateMatrix(ySize, 1));
-
-            //ErrorFunction = new MeanSquareError();
-
-            RegisterWeights(_bias, _weights);
+            _weights = new NeuroWeight(Matrix.RandomMatrix(ySize, xSize, 5e-2f));
+            _bias = new NeuroWeight(Matrix.RandomMatrix(ySize, 1, 5e-2f));
         }
 
         public override int InputSize => _weights.Weight.Cols;
         public override int OutputSize => _weights.Weight.Rows;
-        public override int TotalParamCount => _weights.Weight.Length + _bias.Weight.Length;
-
-        public override void InitSequence()
-        {
-            Input.Clear();
-            Output.Clear();
-        }
-
-        public override void ResetMemory()
-        {
-            //nothing to do here
-        }
-
-        public override void ResetOptimizer()
-        {
-            _bias.ClearCache();
-            _weights.ClearCache();
-        }
-
-        public override void ClampGrads(float limit)
-        {
-            _bias.Gradient.Clamp(-limit, limit);
-            _weights.Gradient.Clamp(-limit, limit);
-        }
-
-        public override LayerBase Clone()
-        {
-            return new LinearLayer(this);
-        }
 
         public override void Optimize(OptimizerBase optimizer)
         {

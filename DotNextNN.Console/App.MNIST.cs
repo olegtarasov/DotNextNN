@@ -33,8 +33,9 @@ namespace DotNextNN.ConsoleTest
             var testSet = MnistDataSet.Load(Path.Combine(path, "t10k-images-idx3-ubyte"), Path.Combine(path, "t10k-labels-idx1-ubyte"));
 
             var optimizer = new AdamOptimizer();
-            var network = new LayeredNet(batchSize, 1,
-                new AffineLayer(trainSet.InputSize, hSize, AffineActivation.Sigmoid),
+            var network = new LayeredNet(batchSize,
+                new LinearLayer(trainSet.InputSize, hSize),
+                new SigmoidLayer(hSize),
                 new LinearLayer(hSize, trainSet.TargetSize),
                 new SoftMaxLayer(trainSet.TargetSize));
 
@@ -46,7 +47,6 @@ namespace DotNextNN.ConsoleTest
             double epoch = 0.0;
             
             var watch = new Stopwatch();
-            network.ResetMemory();
 
             const int FILTER_SIZE = 100;
             var filter = new List<double>(FILTER_SIZE);
@@ -128,7 +128,7 @@ namespace DotNextNN.ConsoleTest
         {
             dataSet.BatchSize = 10;
             var samples = dataSet.GetNextSample();
-            var clone = network.Clone(10, 1);
+            network.BatchSize = 10;
 
             var converter = new MatrixToImage(1.0, 0);
 
@@ -137,7 +137,7 @@ namespace DotNextNN.ConsoleTest
 
                 writer.WriteLine("Predicted,Actual");
 
-                var result = clone.Step(samples.Input);
+                var result = network.Step(samples.Input);
                 var predicted = SoftMaxLayer.SoftMaxChoice(result);
                 var target = samples.Target;
 

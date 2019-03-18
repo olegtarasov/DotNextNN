@@ -15,24 +15,8 @@ namespace DotNextNN.Core.Neural.Layers
             _size = size;
         }
 
-        public SigmoidLayer(BinaryReader reader) : base(reader)
-        {
-            _size = reader.ReadInt32();
-        }
-
-        private SigmoidLayer(SigmoidLayer other) : base(other)
-        {
-            _size = other._size;
-        }
-
         public override int InputSize => _size;
         public override int OutputSize => _size;
-        public override int TotalParamCount => 0;
-
-        public override LayerBase Clone()
-        {
-            return new SigmoidLayer(this);
-        }
 
         public override void Optimize(OptimizerBase optimizer)
         {
@@ -63,23 +47,6 @@ namespace DotNextNN.Core.Neural.Layers
             // osens ^ s(x) ^ (1 - s(x))
             var iSens = (ones - Output) ^ Output ^ outSens;
             return iSens;
-        }
-
-        public override void ResetMemory()
-        {
-        }
-
-        public override void ResetOptimizer()
-        {
-        }
-
-        public override void InitSequence()
-        {
-            Output.Clear();
-        }
-
-        public override void ClampGrads(float limit)
-        {
         }
 
         public override void ClearGradients()

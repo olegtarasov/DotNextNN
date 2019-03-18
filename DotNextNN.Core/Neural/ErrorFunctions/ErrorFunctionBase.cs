@@ -25,7 +25,5 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
         /// <param name="target">Target matrix sequence.</param>
         /// <returns>The sequence of error sensitivities.</returns>
         public abstract Matrix BackpropagateError(Matrix output, Matrix target);
-
-        public abstract ErrorFunctionBase Clone();
     }
 }

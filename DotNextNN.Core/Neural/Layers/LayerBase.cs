@@ -9,59 +9,23 @@ namespace DotNextNN.Core.Neural.Layers
 {
     public abstract class LayerBase
     {
-        private readonly List<NeuroWeight> _weights = new List<NeuroWeight>();
+        protected int BatchSize;
 
-        protected int BatchSize, SeqLen;
-
-        protected IntPtr GpuLayerPtr = IntPtr.Zero;
-        
         protected LayerBase()
         {
         }
 
-        protected LayerBase(LayerBase other)
-        {
-            BatchSize = other.BatchSize;
-            SeqLen = other.SeqLen;
-            Input = other.Input?.Clone();
-            Output = other.Output?.Clone();
-            ErrorFunction = other.ErrorFunction?.Clone();
-        }
-
-        protected LayerBase(BinaryReader reader)
-        {
-            BatchSize = reader.ReadInt32();
-            SeqLen = reader.ReadInt32();
-
-            bool hasError = reader.ReadBoolean();
-            if (hasError)
-            {
-                string errorType = reader.ReadString();
-                ErrorFunction = (ErrorFunctionBase)Activator.CreateInstance(Type.GetType(errorType));
-            }
-        }
-
         public abstract int InputSize { get; }
         public abstract int OutputSize { get; }
-        public abstract int TotalParamCount { get; }
 
         public ErrorFunctionBase ErrorFunction { get; set; }
 
         public Matrix Input { get; set; } 
         public Matrix Output { get; set; }
 
-        public virtual IReadOnlyList<NeuroWeight> Weights => _weights;
-
-        public abstract void ClampGrads(float limit);
         public abstract void ClearGradients();
-        public abstract LayerBase Clone();
-        
-        public abstract void InitSequence();
 
         public abstract void Optimize(OptimizerBase optimizer);
-
-        public abstract void ResetMemory();
-        public abstract void ResetOptimizer();
 
         /// <summary>
         ///     Forward layer step
@@ -116,21 +80,10 @@ namespace DotNextNN.Core.Neural.Layers
         {
         }
 
-        /// <summary>
-        /// Registers layer weights to return from <see cref="Weights"/>.
-        /// </summary>
-        /// <param name="weights">Weight collection.</param>
-        protected void RegisterWeights(params NeuroWeight[] weights)
-        {
-            _weights.Clear();
-            _weights.AddRange(weights);
-        }
-
-        internal void Initialize(int batchSize, int seqLen)
+        internal void Initialize(int batchSize)
         {
             BatchSize = batchSize;
-            SeqLen = seqLen;
-
+            
             Initialize();
         }
     }

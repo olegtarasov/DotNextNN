@@ -18,11 +18,6 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
             return BackPropagateCrossEntropyError(output, target);
         }
 
-        public override ErrorFunctionBase Clone()
-        {
-            return new CrossEntropyError();
-        }
-
         private double CrossEntropyErrorImpl(Matrix p, Matrix target)
         {
             if (p.Cols != target.Cols || p.Rows != target.Rows)
