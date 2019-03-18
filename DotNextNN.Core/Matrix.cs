@@ -19,8 +19,7 @@ namespace DotNextNN.Core
 
     public class Matrix
     {
-        private const string BLAS_DLL_S = "mkl_rt.dll";
-        private static MklBlasBackend _backend = new MklBlasBackend();
+        private static readonly MklBlasBackend _backend = new MklBlasBackend();
 
         public readonly int Rows;
         public readonly int Cols;
@@ -248,6 +247,11 @@ namespace DotNextNN.Core
             Array.Copy(_storage, matrix._storage, _storage.Length);
 
             return matrix;
+        }
+
+        public void Clear()
+        {
+            Array.Clear(_storage, 0, _storage.Length);
         }
 
         public void Save(Stream stream)
