@@ -46,34 +46,22 @@ namespace DotNextNN.Core.Neural.Layers
 
             if (inTraining)
             {
-                Outputs.Add(output);
+                Output = output;
             }
 
             return output;
         }
 
-        public override List<Matrix> ErrorPropagate(List<Matrix> targets)
+        public override Matrix ErrorPropagate(Matrix targets)
         {
             return BackPropagate(base.ErrorPropagate(targets));
         }
 
-        public override List<Matrix> BackPropagate(List<Matrix> outSens, bool needInputSens = true, bool clearGrad = true)
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
-            if (Outputs.Count == 0)
-                throw new Exception("Empty inputs history, nothing to propagate!");
-            if (outSens.Count != Outputs.Count)
-                throw new Exception("Not enough sensitivies in list!");
-
-            var ones = new Matrix(outSens[0].Rows, outSens[0].Cols, 1.0f);
-            var iSens = new List<Matrix>();
-            for (int t = 0; t < outSens.Count; t++)
-            {
-                var output = Outputs[t];
-                var osens = outSens[t];
-
-                // osens ^ s(x) ^ (1 - s(x))
-                iSens.Add((ones - output) ^ output ^ osens);
-            }
+            var ones = new Matrix(outSens.Rows, outSens.Cols, 1.0f);
+            // osens ^ s(x) ^ (1 - s(x))
+            var iSens = (ones - Output) ^ Output ^ outSens;
             return iSens;
         }
 
@@ -87,7 +75,7 @@ namespace DotNextNN.Core.Neural.Layers
 
         public override void InitSequence()
         {
-            Outputs.Clear();
+            Output.Clear();
         }
 
         public override void ClampGrads(float limit)

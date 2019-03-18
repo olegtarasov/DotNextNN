@@ -45,7 +45,7 @@ namespace DotNextNN.Core.Neural.Layers
         public override int OutputSize => _activationLayer.OutputSize;
         public override int TotalParamCount => _linearLayer.TotalParamCount + _activationLayer.TotalParamCount;
 
-        public override List<Matrix> BackPropagate(List<Matrix> outSens, bool needInputSens = true, bool clearGrad = true)
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
             var activationSens = _activationLayer.BackPropagate(outSens, needInputSens, clearGrad);
             return _linearLayer.BackPropagate(activationSens, needInputSens, clearGrad);
@@ -62,15 +62,15 @@ namespace DotNextNN.Core.Neural.Layers
             return new AffineLayer(this);
         }
 
-        public override List<Matrix> ErrorPropagate(List<Matrix> targets)
+        public override Matrix ErrorPropagate(Matrix targets)
         {
             return BackPropagate(base.ErrorPropagate(targets));
         }
 
         public override void InitSequence()
         {
-            Inputs.Clear();
-            Outputs.Clear();
+            Input.Clear();
+            Output.Clear();
             _linearLayer.InitSequence();
             _activationLayer.InitSequence();
         }
@@ -95,9 +95,9 @@ namespace DotNextNN.Core.Neural.Layers
 
         public override Matrix Step(Matrix input, bool inTraining = false)
         {
-            Inputs.Add(input);
+            Input = input;
             var output = _activationLayer.Step(_linearLayer.Step(input, inTraining), inTraining);
-            Outputs.Add(output);
+            Output = output;
             return output;
         }
 

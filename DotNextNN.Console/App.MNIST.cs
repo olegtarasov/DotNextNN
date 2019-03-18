@@ -56,8 +56,8 @@ namespace DotNextNN.ConsoleTest
 
             while (true)
             {
-                var sequence = trainSet.GetNextSamples(1);
-                double error = network.TrainSequence(sequence.Inputs, sequence.Targets);
+                var sequence = trainSet.GetNextSample();
+                double error = network.Train(sequence.Input, sequence.Target);
 
                 network.Optimize();
 
@@ -105,7 +105,7 @@ namespace DotNextNN.ConsoleTest
 
                 if (epoch > 5)
                 {
-                    Console.WriteLine("50 epochs reached, finishing training");
+                    Console.WriteLine("20 epochs reached, finishing training");
                     VisualTest(network, testSet);
 
                     Console.ReadKey();
@@ -114,24 +114,20 @@ namespace DotNextNN.ConsoleTest
             }
         }
 
-        private void Test(NeuralNet network, MnistDataSet dataSet, StreamWriter writer)
+        private void Test(LayeredNet network, MnistDataSet dataSet, StreamWriter writer)
         {
-            var samples = dataSet.GetNextSamples(1);
+            var samples = dataSet.GetNextSample();
 
-            network.TestSequence(samples.Inputs, samples.Targets, out var errors);
+            network.Test(samples.Input, samples.Target, out var error);
 
-            foreach (var error in errors)
-            {
-                writer.WriteLine(error);
-            }
-
+            writer.WriteLine(error);
             writer.Flush();
         }
 
         private void VisualTest(LayeredNet network, MnistDataSet dataSet)
         {
             dataSet.BatchSize = 10;
-            var samples = dataSet.GetNextSamples(1);
+            var samples = dataSet.GetNextSample();
             var clone = network.Clone(10, 1);
 
             var converter = new MatrixToImage(1.0, 0);
@@ -141,15 +137,15 @@ namespace DotNextNN.ConsoleTest
 
                 writer.WriteLine("Predicted,Actual");
 
-                var result = clone.Step(samples.Inputs[0]);
+                var result = clone.Step(samples.Input);
                 var predicted = SoftMaxLayer.SoftMaxChoice(result);
-                var target = samples.Targets[0];
+                var target = samples.Target;
 
                 for (int i = 0; i < 10; i++)
                 {
                     int targetClass = -1;
 
-                    for (int classIdx = 0; classIdx < samples.Targets[0].Rows; classIdx++)
+                    for (int classIdx = 0; classIdx < samples.Target.Rows; classIdx++)
                     {
                         if ((int)target[classIdx, i] == 1)
                         {
@@ -165,7 +161,7 @@ namespace DotNextNN.ConsoleTest
 
                     writer.WriteLine($"{predicted[i]},{targetClass}");
 
-                    var input = samples.Inputs[0];
+                    var input = samples.Input;
                     int offset = input.Rows * i;
                     var imageArray = new float[input.Rows];
                     Array.Copy((float[])input, offset, imageArray, 0, input.Rows);

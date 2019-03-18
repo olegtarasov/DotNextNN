@@ -48,7 +48,6 @@
     <Compile Include="MklBlasBackend.cs" />
     <Compile Include="Neural\ErrorFunctions\CrossEntropyError.cs" />
     <Compile Include="Neural\ErrorFunctions\ErrorFunctionBase.cs" />
-    <Compile Include="Neural\INeuralNet.cs" />
     <Compile Include="Neural\Initializers\IMatrixInitializer.cs" />
     <Compile Include="Neural\Initializers\RandomMatrixInitializer.cs" />
     <Compile Include="Neural\LayeredNet.cs" />
@@ -58,8 +57,6 @@
     <Compile Include="Neural\Layers\LinearLayer.cs" />
     <Compile Include="Neural\Layers\SigmoidLayer.cs" />
     <Compile Include="Neural\Layers\SoftMaxLayer.cs" />
-    <Compile Include="Neural\NeuralExtensions.cs" />
-    <Compile Include="Neural\NeuralNet.cs" />
     <Compile Include="Neural\NeuroWeight.cs" />
     <Compile Include="Optimizers\AdamOptimizer.cs" />
     <Compile Include="Optimizers\IOptimizer.cs" />
@@ -71,7 +68,6 @@
     <Compile Include="RandomGenerator\UniformRandom.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="SlowMatrix.cs" />
-    <Compile Include="TrainingSequence.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

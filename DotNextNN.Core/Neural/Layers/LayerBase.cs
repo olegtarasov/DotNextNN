@@ -23,8 +23,8 @@ namespace DotNextNN.Core.Neural.Layers
         {
             BatchSize = other.BatchSize;
             SeqLen = other.SeqLen;
-            Inputs = other.Inputs.Select(x => x.Clone()).ToList();
-            Outputs = other.Outputs.Select(x => x.Clone()).ToList();
+            Input = other.Input?.Clone();
+            Output = other.Output?.Clone();
             ErrorFunction = other.ErrorFunction?.Clone();
         }
 
@@ -47,8 +47,8 @@ namespace DotNextNN.Core.Neural.Layers
 
         public ErrorFunctionBase ErrorFunction { get; set; }
 
-        public List<Matrix> Inputs { get; set; } = new List<Matrix>();
-        public List<Matrix> Outputs { get; set; } = new List<Matrix>();
+        public Matrix Input { get; set; } 
+        public Matrix Output { get; set; }
 
         public virtual IReadOnlyList<NeuroWeight> Weights => _weights;
 
@@ -78,7 +78,7 @@ namespace DotNextNN.Core.Neural.Layers
         /// <param name="needInputSens">Calculate input sensitivity for further propagation</param>
         /// <param name="clearGrad">Clear gradients before backpropagation.</param>
         /// <returns></returns>
-        public virtual List<Matrix> BackPropagate(List<Matrix> outSens, bool needInputSens = true, bool clearGrad = true)
+        public virtual Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
             return outSens;
         }
@@ -86,15 +86,14 @@ namespace DotNextNN.Core.Neural.Layers
         /// <summary>
         ///     Calculates matched error (out-target) and propagates it through layer to inputs
         /// </summary>
-        /// <param name="targets">Sequence of targets</param>
-        public virtual List<Matrix> ErrorPropagate(List<Matrix> targets)
+        public virtual Matrix ErrorPropagate(Matrix target)
         {
             if (ErrorFunction == null)
             {
                 throw new InvalidOperationException("Layer error function is not specified!");
             }
 
-            return ErrorFunction.BackpropagateError(Outputs, targets);
+            return ErrorFunction.BackpropagateError(Output, target);
         }
 
         /// <summary>

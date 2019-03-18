@@ -75,18 +75,6 @@ namespace DotNextNN.ConsoleTest
 
         public Sample GetNextSample()
         {
-            var gen = SafeRandom.Generator;
-            int idx = gen.Next(_images.Count);
-            var input = Matrix.FromColumnArrays(new []{ _images[idx].Data });
-            var target = new float[10];
-            target[_images[idx].Label] = 1.0f;
-
-            return new Sample(input, Matrix.FromColumnArrays(new []{target}));
-        }
-
-        public TrainingSequence GetNextSamples(int count)
-        {
-            if (count != 1) throw new ArgumentOutOfRangeException(nameof(count), "MNIST is not sequential, so sequence length should be set to 1.");
             if (BatchSize <= 0) throw new InvalidOperationException("Set batch size!");
 
             var gen = SafeRandom.Generator;
@@ -100,13 +88,9 @@ namespace DotNextNN.ConsoleTest
                 labels[i][_images[idx].Label] = 1.0f;
             }
 
-            return new TrainingSequence(
-                new List<Matrix> { Matrix.FromColumnArrays(images) },
-                new List<Matrix> { Matrix.FromColumnArrays(labels) });
-        }
-
-        public void Reset()
-        {
+            return new Sample(
+                Matrix.FromColumnArrays(images),
+                Matrix.FromColumnArrays(labels));
         }
 
         public int SampleCount => _images.Count;

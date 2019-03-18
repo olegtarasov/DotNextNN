@@ -13,9 +13,9 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
             return CrossEntropyErrorImpl(output, target);
         }
 
-        public override List<Matrix> BackpropagateError(List<Matrix> outputs, List<Matrix> targets)
+        public override Matrix BackpropagateError(Matrix output, Matrix target)
         {
-            return BackPropagateError(outputs, targets);
+            return BackPropagateCrossEntropyError(output, target);
         }
 
         public override ErrorFunctionBase Clone()
@@ -62,31 +62,6 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
 
             return -err / p.Cols;
         }
-
-        /// <summary>
-        /// Backpropagates the sequence of errors with selected function.
-        /// </summary>
-        /// <param name="outputs">Output sequence.</param>
-        /// <param name="targets">Target sequence.</param>
-        /// <param name="func">Bacpropagation function.</param>
-        /// <returns>The sequence of error sensitivities.</returns>
-        public List<Matrix> BackPropagateError(List<Matrix> outputs, List<Matrix> targets)
-        {
-            if (outputs.Count != targets.Count || targets.Count == 0)
-                throw new Exception("Not enough targets provided or not enough output states stored!");
-
-            var sensitivities = new List<Matrix>(outputs.Count);
-
-            for (int i = 0; i < outputs.Count; i++)
-            {
-                var y = outputs[i];
-                var target = targets[i];
-                sensitivities.Add(BackPropagateCrossEntropyError(y, target));
-            }
-
-            return sensitivities;
-        }
-
 
         private Matrix BackPropagateCrossEntropyError(Matrix output, Matrix target)
         {

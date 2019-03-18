@@ -33,15 +33,8 @@ namespace DotNextNN.Core.Neural.Layers
         /// <returns>Derivative value</returns>
         protected abstract float DerivativeS(Matrix input, Matrix output, int batch, int i, int o);
 
-        public override List<Matrix> BackPropagate(List<Matrix> outSens, bool needInputSens = true, bool clearGrad = true)
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
-            if (Outputs.Count != Inputs.Count)
-                throw new Exception("Backprop was not initialized (empty state sequence)");
-            if (Inputs.Count == 0)
-                throw new Exception("Empty inputs history, nothing to propagate!");
-            if (outSens.Count != Inputs.Count)
-                throw new Exception("Not enough sensitivies in list!");
-
             return PropagateSensitivity(outSens);
         }
 
@@ -50,21 +43,16 @@ namespace DotNextNN.Core.Neural.Layers
         /// </summary>
         /// <param name="outSens">Sequence of sensitivity matrices of next layer</param>
         /// <returns></returns>
-        protected List<Matrix> PropagateSensitivity(List<Matrix> outSens)
+        protected Matrix PropagateSensitivity(Matrix outSens)
         {
-            var iSensList = new List<Matrix>(Inputs.Count);
-            for (int step = 0; step < Inputs.Count; step++)
-            {
-                var oSens = outSens[step];
-                var iSens = new Matrix(InputSize, BatchSize);
-                for (int b = 0; b < BatchSize; b++)
-                    CalcSens(step, b, iSens, oSens);
-                iSensList.Add(iSens);
-            }
-            return iSensList;
+            var iSens = new Matrix(InputSize, BatchSize);
+            for (int b = 0; b < BatchSize; b++)
+                CalcSens(b, iSens, outSens);
+            
+            return iSens;
         }
 
-        private void CalcSens(int step, int batch, Matrix iSens, Matrix outSens)
+        private void CalcSens(int batch, Matrix iSens, Matrix outSens)
         {
             var isens = iSens;
             var osens = outSens;
@@ -72,7 +60,7 @@ namespace DotNextNN.Core.Neural.Layers
             {
                 for (int o = 0; o < OutputSize; o++)
                 {
-                    isens[i, batch] += DerivativeS(Inputs[step], Outputs[step], batch, i, o) * osens[o, batch];
+                    isens[i, batch] += DerivativeS(Input, Output, batch, i, o) * osens[o, batch];
                 }
             }
 

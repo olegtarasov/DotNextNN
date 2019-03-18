@@ -46,8 +46,8 @@ namespace DotNextNN.Core.Neural.Layers
             var output = SoftMaxNorm(input);
             if (inTraining)
             {
-                Inputs.Add(input);
-                Outputs.Add(output);
+                Input = input;
+                Output = output;
             }
             return output;
         }
@@ -67,8 +67,8 @@ namespace DotNextNN.Core.Neural.Layers
 
         public override void InitSequence()
         {
-            Outputs.Clear();
-            Inputs.Clear();
+            Output.Clear();
+            Input.Clear();
         }
 
         public override void ClampGrads(float limit)

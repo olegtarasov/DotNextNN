@@ -40,8 +40,8 @@ namespace DotNextNN.Core.Neural.Layers
 
         public override void InitSequence()
         {
-            Inputs.Clear();
-            Outputs.Clear();
+            Input.Clear();
+            Output.Clear();
         }
 
         public override void ResetMemory()
@@ -83,58 +83,43 @@ namespace DotNextNN.Core.Neural.Layers
             output.Accumulate(_weights.Weight, input);
             if (inTraining)
             {
-                Inputs.Add(input);
-                Outputs.Add(output);
+                Input = input;
+                Output = output;
             }
             return output;
         }
 
-        public override List<Matrix> ErrorPropagate(List<Matrix> targets)
+        public override Matrix ErrorPropagate(Matrix target)
         {
-            return BackPropagate(base.ErrorPropagate(targets));
+            return BackPropagate(base.ErrorPropagate(target));
         }
 
-        public override List<Matrix> BackPropagate(List<Matrix> outSens, bool needInputSens = true, bool clearGrad = true)
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
             if (clearGrad)
             {
                 ClearGradients();
             }
 
-            if (Inputs.Count == 0)
-                throw new Exception("Empty inputs history, nothing to propagate!");
-            if (outSens.Count != Inputs.Count)
-                throw new Exception("Not enough sensitivies in list!");
-
             var yIdentity = new Matrix(BatchSize, 1, 1.0f);
-            var inputSensList = new List<Matrix>(SeqLen);
+            Matrix inputSens = new Matrix(Input.Rows, BatchSize);
 
-            for (int i = SeqLen - 1; i >= 0; i--)
+            _weights.Gradient.Accumulate(outSens, Input, transposeB: TransposeOptions.Transpose);
+            if (BatchSize > 1)
             {
-                var sNext = outSens[i];
-                var x = Inputs[i];
-                _weights.Gradient.Accumulate(sNext, x, transposeB: TransposeOptions.Transpose);
-                if (BatchSize > 1)
-                {
-                    _bias.Gradient.Accumulate(sNext, yIdentity);
-                }
-                else
-                {
-                    _bias.Gradient.Accumulate(sNext);
-                }
-
-                if (needInputSens)
-                {
-                    var dInput = new Matrix(x.Rows, BatchSize);
-                    dInput.Accumulate(_weights.Weight, sNext, transposeA: TransposeOptions.Transpose);
-                    inputSensList.Insert(0, dInput);
-                }
-                else
-                {
-                    inputSensList.Insert(0, new Matrix(x.Rows, BatchSize));
-                }
+                _bias.Gradient.Accumulate(outSens, yIdentity);
             }
-            return inputSensList;
+            else
+            {
+                _bias.Gradient.Accumulate(outSens);
+            }
+
+            if (needInputSens)
+            {
+                inputSens.Accumulate(_weights.Weight, outSens, transposeA: TransposeOptions.Transpose);
+            }
+            
+            return inputSens;
         }
 
         public override void ClearGradients()
