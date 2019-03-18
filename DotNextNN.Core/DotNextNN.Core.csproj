@@ -69,7 +69,9 @@
     <Compile Include="RandomGenerator\IRandom.cs" />
     <Compile Include="RandomGenerator\SafeRandom.cs" />
     <Compile Include="RandomGenerator\UniformRandom.cs" />
+    <Compile Include="Sample.cs" />
     <Compile Include="SlowMatrix.cs" />
+    <Compile Include="TrainingSequence.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

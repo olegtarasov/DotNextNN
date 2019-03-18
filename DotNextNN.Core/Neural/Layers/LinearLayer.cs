@@ -126,7 +126,7 @@ namespace DotNextNN.Core.Neural.Layers
                 if (needInputSens)
                 {
                     var dInput = new Matrix(x.Rows, BatchSize);
-                    dInput.Accumulate(_weights.Weight, sNext, transposeB: TransposeOptions.Transpose);
+                    dInput.Accumulate(_weights.Weight, sNext, transposeA: TransposeOptions.Transpose);
                     inputSensList.Insert(0, dInput);
                 }
                 else

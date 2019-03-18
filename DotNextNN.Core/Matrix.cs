@@ -112,6 +112,22 @@ namespace DotNextNN.Core
             }
         }
 
+        public static Matrix FromColumnArrays(float[][] source)
+        {
+            var storage = new float[source[0].Length * source.Length];
+            int idx = -1;
+
+            for (int col = 0; col < source.Length; col++)
+            {
+                for (int row = 0; row < source[0].Length; row++)
+                {
+                    storage[++idx] = source[col][row];
+                }
+            }
+
+            return new Matrix(source[0].Length, source.Length, storage);
+        }
+
         public static Matrix Load(Stream stream)
         {
             using (var reader = new BinaryReader(stream, Encoding.UTF8, true))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using DotNextNN.Core.Optimizers;
 
 namespace DotNextNN.Core.Neural.Layers
@@ -41,7 +42,7 @@ namespace DotNextNN.Core.Neural.Layers
         {
             var output = input.Clone();
 
-            MathProvider.ApplySigmoid(output);
+            ApplySigmoid(output);
 
             if (inTraining)
             {
@@ -93,16 +94,18 @@ namespace DotNextNN.Core.Neural.Layers
         {
         }
 
-        public override void ToVectorState(T[] destination, ref int idx, bool grad = false)
-        {
-        }
-
-        public override void FromVectorState(T[] vector, ref int idx)
-        {
-        }
-
         public override void ClearGradients()
         {
+        }
+
+        private void ApplySigmoid(Matrix input)
+        {
+            var m = (float[])input;
+
+            Parallel.For(0, m.Length, i =>
+            {
+                m[i] = 1.0f / (1 + (float)Math.Exp(-m[i]));
+            });
         }
     }
 }

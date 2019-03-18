@@ -12,7 +12,7 @@ namespace DotNextNN.Core.Optimizers
 	        LearningRate = learningRate;
 	    }
 
-	    protected OptimizerBase(OptimizerBase<T> other)
+	    protected OptimizerBase(OptimizerBase other)
 	    {
 	        LearningRate = other.LearningRate;
 	    }

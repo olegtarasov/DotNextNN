@@ -14,7 +14,7 @@ namespace DotNextNN.Core.Optimizers
             _b2 = b2;
         }
 
-        public AdamOptimizer(AdamOptimizer<T> other) : base(other)
+        public AdamOptimizer(AdamOptimizer other) : base(other)
         {
             _b1 = other._b1;
             _b2 = other._b2;
