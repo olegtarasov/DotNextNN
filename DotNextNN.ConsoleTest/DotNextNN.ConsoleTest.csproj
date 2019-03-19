@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CA328454-80E8-4431-9055-7791B6B480B8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DotNextNN.Console</RootNamespace>
-    <AssemblyName>DotNextNN.Console</AssemblyName>
+    <RootNamespace>DotNextNN.ConsoleTest</RootNamespace>
+    <AssemblyName>DotNextNN.ConsoleTest</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

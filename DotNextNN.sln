@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNextNN.Core", "DotNextNN.Core\DotNextNN.Core.csproj", "{A742BC92-812D-4A5A-A317-745E3F7817DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNextNN.Console", "DotNextNN.Console\DotNextNN.Console.csproj", "{CA328454-80E8-4431-9055-7791B6B480B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNextNN.ConsoleTest", "DotNextNN.ConsoleTest\DotNextNN.ConsoleTest.csproj", "{CA328454-80E8-4431-9055-7791B6B480B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
