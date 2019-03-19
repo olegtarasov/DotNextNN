@@ -1,0 +1,190 @@
+﻿Base
+========================
+protected int BatchSize;
+
+protected LayerBase()
+{
+}
+
+public abstract int InputSize { get; }
+public abstract int OutputSize { get; }
+
+public ErrorFunctionBase ErrorFunction { get; set; }
+
+public Matrix Input { get; set; } 
+public Matrix Output { get; set; }
+
+/// <summary>
+///     Forward layer step
+/// </summary>
+/// <param name="input">Input matrix</param>
+/// <param name="inTraining">Store states for back propagation</param>
+/// <returns>Layer output</returns>
+public abstract Matrix Step(Matrix input, bool inTraining = false);
+
+/// <summary>
+///     Calculates matched layer error.
+/// </summary>
+/// <param name="y">Layer output</param>
+/// <param name="target">Layer target</param>
+/// <returns></returns>
+public virtual double LayerError(Matrix y, Matrix target)
+{
+    if (ErrorFunction == null)
+    {
+        throw new InvalidOperationException("Layer error function is not specified!");
+    }
+
+    return ErrorFunction.GetError(y, target);
+}
+
+internal void Initialize(int batchSize)
+{
+    BatchSize = batchSize;
+}
+
+
+Linear
+==========================
+private NeuroWeight _bias;
+private NeuroWeight _weights;
+
+public LinearLayer(int xSize, int ySize)
+{
+    _weights = new NeuroWeight(Matrix.RandomMatrix(ySize, xSize, 5e-2f));
+    _bias = new NeuroWeight(Matrix.RandomMatrix(ySize, 1, 5e-2f));
+}
+
+public override int InputSize => _weights.Weight.Cols;
+public override int OutputSize => _weights.Weight.Rows;
+
+public override Matrix Step(Matrix input, bool inTraining = false)
+{
+    if (input.Rows != _weights.Weight.Cols)
+        throw new Exception($"Wrong input matrix row size provided!\nExpected: {_weights.Weight.Cols}, got: {input.Rows}");
+    if (input.Cols != BatchSize)
+        throw new Exception($"Wrong input batch size!\nExpected: {BatchSize}, got: {input.Cols}");
+
+    var output = _bias.Weight.TileVector(input.Cols);
+    output.Accumulate(_weights.Weight, input);
+    if (inTraining)
+    {
+        Input = input;
+        Output = output;
+    }
+    return output;
+}
+
+
+Sigmoid
+=====================
+private readonly int _size;
+
+public SigmoidLayer(int size)
+{
+    _size = size;
+}
+
+public override int InputSize => _size;
+public override int OutputSize => _size;
+
+public override Matrix Step(Matrix input, bool inTraining = false)
+{
+    var output = input.Clone();
+
+    ApplySigmoid(output);
+
+    if (inTraining)
+    {
+        Output = output;
+    }
+
+    return output;
+}
+
+private void ApplySigmoid(Matrix input)
+{
+    var m = (float[])input;
+
+    Parallel.For(0, m.Length, i =>
+    {
+        m[i] = 1.0f / (1 + (float)Math.Exp(-m[i]));
+    });
+}
+
+
+SoftMax
+=======================
+private readonly int _size;
+
+public SoftMaxLayer(int size)
+{
+    _size = size;
+
+    ErrorFunction = new CrossEntropyError();
+}
+
+        
+public override int InputSize => _size;
+public override int OutputSize => _size;
+
+
+public override Matrix Step(Matrix input, bool inTraining = false)
+{
+    var output = SoftMaxNorm(input);
+    if (inTraining)
+    {
+        Input = input;
+        Output = output;
+    }
+    return output;
+}
+
+private Matrix SoftMaxNorm(Matrix y, double T = 1)
+{
+    var p = y.Clone();
+
+    var ya = (float[])y;
+    var pa = (float[])p;
+
+    var sums = new float[y.Cols];
+    for (int i = 0; i < ya.Length; i++)
+    {
+        pa[i] = (float)Math.Exp(pa[i] / T);
+        var c = i / y.Rows;
+        sums[c] += pa[i];
+    }
+
+    for (int i = 0; i < ya.Length; i++)
+    {
+        var c = i / y.Rows;
+        pa[i] /= sums[c];
+    }
+
+    return p;
+}
+
+public static List<int> SoftMaxChoice(Matrix p, double T = 1)
+{
+    var probs = new List<int>(p.Cols);
+    var rnd = SafeRandom.Generator;
+
+    for (int j = 0; j < p.Cols; j++)
+    {
+        var dChoice = rnd.NextDouble();
+        double curPos = 0;
+        double nextPos = p[0, j];
+
+        int i;
+        for (i = 1; i < p.Rows; i++)
+        {
+            if (dChoice > curPos && dChoice <= nextPos)
+                break;
+            curPos = nextPos;
+            nextPos += p[i, j];
+        }
+
+        probs.Add(i - 1);
+    }
+    return probs;
+}
