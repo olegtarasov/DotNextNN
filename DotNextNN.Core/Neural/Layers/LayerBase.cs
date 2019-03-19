@@ -76,15 +76,9 @@ namespace DotNextNN.Core.Neural.Layers
             return ErrorFunction.GetError(y, target);
         }
 
-        protected virtual void Initialize()
-        {
-        }
-
         internal void Initialize(int batchSize)
         {
             BatchSize = batchSize;
-            
-            Initialize();
         }
     }
 }

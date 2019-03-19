@@ -49,7 +49,6 @@
     <Compile Include="Neural\ErrorFunctions\CrossEntropyError.cs" />
     <Compile Include="Neural\ErrorFunctions\ErrorFunctionBase.cs" />
     <Compile Include="Neural\LayeredNet.cs" />
-    <Compile Include="Neural\Layers\DerivativeLayerBase.cs" />
     <Compile Include="Neural\Layers\LayerBase.cs" />
     <Compile Include="Neural\Layers\LinearLayer.cs" />
     <Compile Include="Neural\Layers\SigmoidLayer.cs" />

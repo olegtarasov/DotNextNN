@@ -7,7 +7,7 @@ using Retia.RandomGenerator;
 
 namespace DotNextNN.Core.Neural.Layers
 {
-    public class SoftMaxLayer : DerivativeLayerBase
+    public class SoftMaxLayer : LayerBase
     {
         private readonly int _size;
 
@@ -38,9 +38,9 @@ namespace DotNextNN.Core.Neural.Layers
             return output;
         }
 
-        protected override float DerivativeS(Matrix input, Matrix output, int batch, int i, int o)
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
         {
-            return i == o ? output[i, batch] * (1 - output[o, batch]) : -output[i, batch] * output[o, batch];
+            throw new NotSupportedException("SoftMax layer should be the last layer!");
         }
 
         public override void ClearGradients()
