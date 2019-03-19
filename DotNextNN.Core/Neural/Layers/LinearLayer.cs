@@ -20,6 +20,12 @@ namespace DotNextNN.Core.Neural.Layers
         public override int InputSize => _weights.Weight.Cols;
         public override int OutputSize => _weights.Weight.Rows;
 
+        public override void Optimize(OptimizerBase optimizer)
+        {
+            optimizer.Optimize(_weights);
+            optimizer.Optimize(_bias);
+        }
+
         public override Matrix Step(Matrix input, bool inTraining = false)
         {
             if (input.Rows != _weights.Weight.Cols)
@@ -35,6 +41,45 @@ namespace DotNextNN.Core.Neural.Layers
                 Output = output;
             }
             return output;
+        }
+
+        public override Matrix ErrorPropagate(Matrix target)
+        {
+            return BackPropagate(base.ErrorPropagate(target));
+        }
+
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
+        {
+            if (clearGrad)
+            {
+                ClearGradients();
+            }
+
+            var yIdentity = new Matrix(BatchSize, 1, 1.0f);
+            Matrix inputSens = new Matrix(Input.Rows, BatchSize);
+
+            _weights.Gradient.Accumulate(outSens, Input, transposeB: TransposeOptions.Transpose);
+            if (BatchSize > 1)
+            {
+                _bias.Gradient.Accumulate(outSens, yIdentity);
+            }
+            else
+            {
+                _bias.Gradient.Accumulate(outSens);
+            }
+
+            if (needInputSens)
+            {
+                inputSens.Accumulate(_weights.Weight, outSens, transposeA: TransposeOptions.Transpose);
+            }
+            
+            return inputSens;
+        }
+
+        public override void ClearGradients()
+        {
+            _weights.ClearGrad();
+            _bias.ClearGrad();
         }
     }
 }

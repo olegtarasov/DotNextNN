@@ -23,7 +23,9 @@ namespace DotNextNN.Core.Neural.Layers
         public Matrix Input { get; set; } 
         public Matrix Output { get; set; }
 
-        
+        public abstract void ClearGradients();
+
+        public abstract void Optimize(OptimizerBase optimizer);
 
         /// <summary>
         ///     Forward layer step
@@ -32,6 +34,31 @@ namespace DotNextNN.Core.Neural.Layers
         /// <param name="inTraining">Store states for back propagation</param>
         /// <returns>Layer output</returns>
         public abstract Matrix Step(Matrix input, bool inTraining = false);
+
+        /// <summary>
+        ///     Propagates next layer sensitivity to input, accumulating gradients for optimization
+        /// </summary>
+        /// <param name="outSens">Sequence of sensitivity matrices of next layer</param>
+        /// <param name="needInputSens">Calculate input sensitivity for further propagation</param>
+        /// <param name="clearGrad">Clear gradients before backpropagation.</param>
+        /// <returns></returns>
+        public virtual Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
+        {
+            return outSens;
+        }
+
+        /// <summary>
+        ///     Calculates matched error (out-target) and propagates it through layer to inputs
+        /// </summary>
+        public virtual Matrix ErrorPropagate(Matrix target)
+        {
+            if (ErrorFunction == null)
+            {
+                throw new InvalidOperationException("Layer error function is not specified!");
+            }
+
+            return ErrorFunction.BackpropagateError(Output, target);
+        }
 
         /// <summary>
         ///     Calculates matched layer error.

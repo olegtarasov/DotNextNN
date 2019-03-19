@@ -23,6 +23,10 @@ namespace DotNextNN.Core.Neural.Layers
         public override int OutputSize => _size;
 
 
+        public override void Optimize(OptimizerBase optimizer)
+        {
+        }
+
         public override Matrix Step(Matrix input, bool inTraining = false)
         {
             var output = SoftMaxNorm(input);
@@ -32,6 +36,15 @@ namespace DotNextNN.Core.Neural.Layers
                 Output = output;
             }
             return output;
+        }
+
+        public override Matrix BackPropagate(Matrix outSens, bool needInputSens = true, bool clearGrad = true)
+        {
+            throw new NotSupportedException("SoftMax layer should be the last layer!");
+        }
+
+        public override void ClearGradients()
+        {
         }
 
         public static List<int> SoftMaxChoice(Matrix p, double T = 1)

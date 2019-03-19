@@ -45,13 +45,35 @@ namespace DotNextNN.Core.Neural
             }
         }
 
+        public OptimizerBase Optimizer { get; set; }
 
         private LayerBase OutLayer => _layersList[_layersList.Count - 1];
         private LayerBase InLayer => _layersList[0];
 
+        public void Optimize()
+        {
+            foreach (var layer in _layersList)
+            {
+                layer.Optimize(Optimizer);
+            }
+        }
+
         public double Error(Matrix y, Matrix target)
         {
             return OutLayer.LayerError(y, target);
+        }
+
+        public Matrix BackPropagate(Matrix target, bool needInputSens = false)
+        {  
+            Matrix prop = OutLayer.ErrorPropagate(target);
+            if (_layersList.Count < 2)
+                return prop;
+            for (int i = _layersList.Count - 2; i > 0; i--)
+            {
+                var layer = _layersList[i];
+                prop = layer.BackPropagate(prop, true);
+            }
+            return InLayer.BackPropagate(prop, needInputSens);
         }
 
         public Matrix Step(Matrix input, bool inTraining = false)
@@ -60,6 +82,23 @@ namespace DotNextNN.Core.Neural
             foreach (var layer in _layersList)
                 prop = layer.Step(prop, inTraining);
             return prop;
+        }
+
+        public virtual Matrix Test(Matrix input, Matrix target, out double error)
+        {
+            var y = Step(input);
+            error = Error(y, target);
+            
+            return y;
+        }
+
+        public virtual double Train(Matrix input, Matrix target)
+        {
+            var y = Step(input, true);
+            double error = Error(y, target);
+            BackPropagate(target);
+
+            return error;
         }
     }
 }
