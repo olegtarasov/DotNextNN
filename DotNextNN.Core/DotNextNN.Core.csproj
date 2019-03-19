@@ -46,23 +46,15 @@
   <ItemGroup>
     <Compile Include="Matrix.cs" />
     <Compile Include="MklBlasBackend.cs" />
-    <Compile Include="Neural\ErrorFunctions\CrossEntropyError.cs" />
-    <Compile Include="Neural\ErrorFunctions\ErrorFunctionBase.cs" />
-    <Compile Include="Neural\LayeredNet.cs" />
-    <Compile Include="Neural\Layers\LayerBase.cs" />
-    <Compile Include="Neural\Layers\LinearLayer.cs" />
-    <Compile Include="Neural\Layers\SigmoidLayer.cs" />
-    <Compile Include="Neural\Layers\SoftMaxLayer.cs" />
-    <Compile Include="Neural\NeuroWeight.cs" />
-    <Compile Include="Optimizers\AdamOptimizer.cs" />
-    <Compile Include="Optimizers\OptimizerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGenerator\BaseRandom.cs" />
     <Compile Include="RandomGenerator\IRandom.cs" />
     <Compile Include="RandomGenerator\SafeRandom.cs" />
     <Compile Include="RandomGenerator\UniformRandom.cs" />
-    <Compile Include="Sample.cs" />
     <Compile Include="SlowMatrix.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Matrix.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

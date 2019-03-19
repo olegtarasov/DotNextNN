@@ -47,8 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.MatrixTests.cs" />
-    <Compile Include="App.MNIST.cs" />
-    <Compile Include="MNISTDataset.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
