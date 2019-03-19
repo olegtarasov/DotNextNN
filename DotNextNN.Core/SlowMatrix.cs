@@ -8,7 +8,7 @@ namespace DotNextNN.Core
         public static float[][] FromMatrix(Matrix matrix)
         {
             var columns = new float[matrix.Cols][];
-            var storage = matrix.Storage;
+            var storage = (float[])matrix;
             int idx = -1;
             for (int col = 0; col < matrix.Cols; col++)
             {
@@ -31,24 +31,6 @@ namespace DotNextNN.Core
                 }
 
                 result[row] = newRow;
-            }
-
-            return result;
-        }
-
-        public static float[][] RandomMatrix(int rows, int cols, float min, float max)
-        {
-            var rnd = SafeRandom.Generator;
-            var result = new float[rows][];
-            for (int i = 0; i < rows; i++)
-            {
-                var col = new float[cols];
-                for (int j = 0; j < cols; j++)
-                {
-                    col[j] = (float)rnd.NextDouble(min, max);
-                }
-
-                result[i] = col;
             }
 
             return result;

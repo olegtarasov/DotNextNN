@@ -7,7 +7,6 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
     /// Base class for the error function. Error function consists of a forward pass function
     /// and a backpropagation function.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public abstract class ErrorFunctionBase
     {
         /// <summary>

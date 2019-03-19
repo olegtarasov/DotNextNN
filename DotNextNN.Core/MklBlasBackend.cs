@@ -44,24 +44,6 @@ namespace DotNextNN.Core
             CblasColMajor = 102
         }
 
-        private enum CblasUplo
-        {
-            CblasUpper = 121,
-            CblasLower = 122
-        }
-
-        private enum CblasDiag
-        {
-            CblasNonUnit = 131,
-            CblasUnit = 132
-        }
-
-        private enum CblasSide
-        {
-            CblasLeft = 141,
-            CblasRight = 142
-        }
-
         private const string BLAS_DLL_S = "mkl_rt.dll";
 
         [DllImport(BLAS_DLL_S, CallingConvention = CallingConvention.Cdecl)]

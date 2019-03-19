@@ -10,12 +10,8 @@ namespace DotNextNN.Core.Neural.Layers
     /// </summary>
     public abstract class DerivativeLayerBase : LayerBase
     {
-        protected DerivativeLayerBase()
-        {
-        }
-
         /// <summary>
-        ///     Get value of layer output derrivative with respect to input (dO/dI of [batch]). Single precision version.
+        ///     Get value of layer output derivative with respect to input (dO/dI of [batch]). Single precision version.
         /// </summary>
         /// <param name="input">Input value matrix</param>
         /// <param name="output">Output value matrix</param>
