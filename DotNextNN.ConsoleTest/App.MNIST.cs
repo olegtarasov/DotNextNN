@@ -12,6 +12,7 @@ using CLAP;
 using DotNextNN.Core;
 using DotNextNN.Core.Neural;
 using DotNextNN.Core.Neural.Layers;
+using DotNextNN.Core.Optimizers;
 
 namespace DotNextNN.ConsoleTest
 {
@@ -31,12 +32,14 @@ namespace DotNextNN.ConsoleTest
             var trainSet = MnistDataSet.Load(Path.Combine(path, "train-images-idx3-ubyte"), Path.Combine(path, "train-labels-idx1-ubyte"));
             var testSet = MnistDataSet.Load(Path.Combine(path, "t10k-images-idx3-ubyte"), Path.Combine(path, "t10k-labels-idx1-ubyte"));
 
+            var optimizer = new AdamOptimizer();
             var network = new LayeredNet(batchSize,
                 new LinearLayer(trainSet.InputSize, hSize),
                 new SigmoidLayer(hSize),
                 new LinearLayer(hSize, trainSet.TargetSize),
                 new SoftMaxLayer(trainSet.TargetSize));
 
+            network.Optimizer = optimizer;
             trainSet.BatchSize = batchSize;
             testSet.BatchSize = batchSize;
 
@@ -45,7 +48,80 @@ namespace DotNextNN.ConsoleTest
             
             var watch = new Stopwatch();
 
-            VisualTest(network, testSet);
+            const int FILTER_SIZE = 100;
+            var filter = new List<double>(FILTER_SIZE);
+            var globErrList = new List<double>();
+
+            watch.Restart();
+
+            while (true)
+            {
+                var sequence = trainSet.GetNextSample();
+                double error = network.Train(sequence.Input, sequence.Target);
+
+                network.Optimize();
+
+                epoch = (double)(iter * batchSize) / trainSet.SampleCount;
+
+                filter.Add(error);
+                if (filter.Count > FILTER_SIZE)
+                    filter.RemoveAt(0);
+
+                var err = filter.Sum() / FILTER_SIZE;
+                if (filter.Count == FILTER_SIZE)
+                    globErrList.Add(err);
+                if (filter.Count < FILTER_SIZE)
+                    err = error;
+
+                iter++;
+
+
+                if (iter % 10 == 0)
+                {
+                    watch.Stop();
+                    Console.WriteLine($"Epoch #{epoch.ToString("F3", NumberFormatInfo.InvariantInfo)} - iter #{iter}:");
+                    Console.WriteLine("---------");
+                    Console.WriteLine("\tError:\t\t{0:0.0000}", err);
+                    Console.WriteLine("\tDuration:\t{0:0.0000}s", watch.Elapsed.TotalSeconds);
+                    Console.WriteLine("---------\n");
+
+                    Test(network, testSet, testErrWriter);
+
+                    watch.Restart();
+                }
+
+                if (iter % 500 == 0)
+                {
+                    foreach (var e in globErrList)
+                    {
+                        errWriter.WriteLine(e);
+                    }
+
+                    errFile.Flush(true);
+
+                    globErrList.Clear();
+
+                }
+
+                if (epoch > 5)
+                {
+                    Console.WriteLine("20 epochs reached, finishing training");
+                    VisualTest(network, testSet);
+
+                    Console.ReadKey();
+                    return;
+                }
+            }
+        }
+
+        private void Test(LayeredNet network, MnistDataSet dataSet, StreamWriter writer)
+        {
+            var samples = dataSet.GetNextSample();
+
+            network.Test(samples.Input, samples.Target, out var error);
+
+            writer.WriteLine(error);
+            writer.Flush();
         }
 
         private void VisualTest(LayeredNet network, MnistDataSet dataSet)

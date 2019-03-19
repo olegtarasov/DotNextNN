@@ -1,0 +1,40 @@
+﻿public Matrix BackPropagate(Matrix target, bool needInputSens = false)
+{  
+    Matrix prop = OutLayer.ErrorPropagate(target);
+    if (_layersList.Count < 2)
+        return prop;
+    for (int i = _layersList.Count - 2; i > 0; i--)
+    {
+        var layer = _layersList[i];
+        prop = layer.BackPropagate(prop, true);
+    }
+    return InLayer.BackPropagate(prop, needInputSens);
+}
+
+
+public virtual Matrix Test(Matrix input, Matrix target, out double error)
+{
+    var y = Step(input);
+    error = Error(y, target);
+            
+    return y;
+}
+
+public virtual double Train(Matrix input, Matrix target)
+{
+    var y = Step(input, true);
+    double error = Error(y, target);
+    BackPropagate(target);
+
+    return error;
+}
+
+public OptimizerBase Optimizer { get; set; }
+
+public void Optimize()
+{
+    foreach (var layer in _layersList)
+    {
+        layer.Optimize(Optimizer);
+    }
+}
