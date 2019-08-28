@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.2/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_DotNextNN.-725708824.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="DotNextNN.ConsoleTest" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="App.MatrixTests.cs" t="Include" />
+        <e p="App.MNIST.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DotNextNN.ConsoleTest.csproj" t="IncludeRecursive" />
+        <e p="MNISTDataset.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="DotNextNN.ConsoleTest.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="DotNextNN.Core" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DotNextNN.Core.csproj" t="IncludeRecursive" />
+        <e p="Matrix.cs" t="Include" />
+        <e p="MklBlasBackend.cs" t="Include" />
+        <e p="Neural" t="Include">
+          <e p="ErrorFunctions" t="Include">
+            <e p="CrossEntropyError.cs" t="Include" />
+            <e p="ErrorFunctionBase.cs" t="Include" />
+          </e>
+          <e p="LayeredNet.cs" t="Include" />
+          <e p="Layers" t="Include">
+            <e p="LayerBase.cs" t="Include" />
+            <e p="LinearLayer.cs" t="Include" />
+            <e p="SigmoidLayer.cs" t="Include" />
+            <e p="SoftMaxLayer.cs" t="Include" />
+          </e>
+          <e p="NeuroWeight.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="DotNextNN.Core.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Optimizers" t="Include">
+          <e p="AdamOptimizer.cs" t="Include" />
+          <e p="OptimizerBase.cs" t="Include" />
+        </e>
+        <e p="RandomGenerator" t="Include">
+          <e p="BaseRandom.cs" t="Include" />
+          <e p="IRandom.cs" t="Include" />
+          <e p="SafeRandom.cs" t="Include" />
+          <e p="UniformRandom.cs" t="Include" />
+        </e>
+        <e p="Sample.cs" t="Include" />
+        <e p="SlowMatrix.cs" t="Include" />
+      </e>
+      <e p="DotNextNN.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

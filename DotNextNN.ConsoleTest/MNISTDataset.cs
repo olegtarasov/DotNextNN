@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using DotNextNN.Core;
-using Retia.RandomGenerator;
+using DotNextNN.Core.RandomGenerator;
 
 namespace DotNextNN.ConsoleTest
 {

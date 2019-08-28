@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using DotNextNN.Core.Neural.ErrorFunctions;
 using DotNextNN.Core.Optimizers;
-using Retia.RandomGenerator;
+using DotNextNN.Core.RandomGenerator;
 
 namespace DotNextNN.Core.Neural.Layers
 {

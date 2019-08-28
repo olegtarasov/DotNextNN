@@ -10,20 +10,10 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
     {
         public override double GetError(Matrix output, Matrix target)
         {
-            return CrossEntropyErrorImpl(output, target);
-        }
-
-        public override Matrix BackpropagateError(Matrix output, Matrix target)
-        {
-            return BackPropagateCrossEntropyError(output, target);
-        }
-
-        private double CrossEntropyErrorImpl(Matrix p, Matrix target)
-        {
-            if (p.Cols != target.Cols || p.Rows != target.Rows)
+            if (output.Cols != target.Cols || output.Rows != target.Rows)
                 throw new Exception("Matrix dimensions must agree!");
 
-            var pa = (float[])p;
+            var pa = (float[])output;
             var ta = (float[])target;
 
             //E(y0, ... ,yn) = -y0*log(p0)-...-yn*log(pn)
@@ -33,10 +23,10 @@ namespace DotNextNN.Core.Neural.ErrorFunctions
                 err += ta[i] * Math.Log(pa[i]);
             }
 
-            return -err / p.Cols;
+            return -err / output.Cols;
         }
 
-        private Matrix BackPropagateCrossEntropyError(Matrix output, Matrix target)
+        public override Matrix BackpropagateError(Matrix output, Matrix target)
         {
             var result = new Matrix(output.Rows, output.Cols);
             var oa = (float[])output;

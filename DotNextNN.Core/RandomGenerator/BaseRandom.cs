@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Retia.RandomGenerator
+namespace DotNextNN.Core.RandomGenerator
 {
     public abstract class BaseRandom : IRandom
     {

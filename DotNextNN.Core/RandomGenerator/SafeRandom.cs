@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace Retia.RandomGenerator
+namespace DotNextNN.Core.RandomGenerator
 {
     /// <summary>
     /// Thread-safe uniform random generator implementation.

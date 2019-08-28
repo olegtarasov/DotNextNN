@@ -18,11 +18,6 @@ namespace DotNextNN.Core.Optimizers
         {
             weight.Timestep++;
 
-            AdamUpdate(weight);
-        }
-
-        private void AdamUpdate(NeuroWeight weight)
-        {
             var w = (float[])weight.Weight;
             var c1 = (float[])weight.Cache1;
             var c2 = (float[])weight.Cache2;

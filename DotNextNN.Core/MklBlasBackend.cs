@@ -68,7 +68,7 @@ namespace DotNextNN.Core
             CblasColMajor = 102
         }
 
-        private const string BLAS_DLL_S = "mkl_rt.dll";
+        private const string BLAS_DLL_S = "blas";
 
         [DllImport(BLAS_DLL_S, CallingConvention = CallingConvention.Cdecl)]
         private static extern unsafe float* cblas_sgemv(int order, int trans, int m, int n, float alpha, float* A,

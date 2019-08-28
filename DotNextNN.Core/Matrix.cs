@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Retia.RandomGenerator;
+using DotNextNN.Core.RandomGenerator;
 
 namespace DotNextNN.Core
 {

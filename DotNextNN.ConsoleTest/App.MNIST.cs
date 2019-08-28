@@ -6,8 +6,8 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Accord.Imaging.Converters;
-using Accord.Math;
+//using Accord.Imaging.Converters;
+//using Accord.Math;
 using CLAP;
 using DotNextNN.Core;
 using DotNextNN.Core.Neural;
@@ -19,7 +19,7 @@ namespace DotNextNN.ConsoleTest
     internal partial class App
     {
         [Verb]
-        public void TrainMNIST(string path)
+        public void TrainMNIST(string path, int epochs = 5)
         {
             const int batchSize = 128;
             const int hSize = 20;
@@ -103,9 +103,9 @@ namespace DotNextNN.ConsoleTest
 
                 }
 
-                if (epoch > 5)
+                if (epoch > epochs)
                 {
-                    Console.WriteLine("20 epochs reached, finishing training");
+                    Console.WriteLine($"{epochs} epochs reached, finishing training");
                     VisualTest(network, testSet);
 
                     Console.ReadKey();
@@ -130,7 +130,7 @@ namespace DotNextNN.ConsoleTest
             var samples = dataSet.GetNextSample();
             network.BatchSize = 10;
 
-            var converter = new MatrixToImage(1.0, 0);
+            //var converter = new MatrixToImage(1.0, 0);
 
             using (var writer = new StreamWriter("VisualTest.txt"))
             {
@@ -166,8 +166,8 @@ namespace DotNextNN.ConsoleTest
                     var imageArray = new float[input.Rows];
                     Array.Copy((float[])input, offset, imageArray, 0, input.Rows);
 
-                    converter.Convert(imageArray.Reshape(28, 28), out Bitmap bitmap);
-                    bitmap.Save($"{i}.bmp", ImageFormat.Bmp);
+                    //converter.Convert(imageArray.Reshape(28, 28), out Bitmap bitmap);
+                    //bitmap.Save($"{i}.bmp", ImageFormat.Bmp);
                 }
             }
         }
