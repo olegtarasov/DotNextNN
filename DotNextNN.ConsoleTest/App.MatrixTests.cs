@@ -21,6 +21,8 @@ namespace DotNextNN.ConsoleTest
             const float MaxValue = 5;
             const float MinValue = -MaxValue;
 
+            Console.WriteLine("Generating matrices");
+            
             // Generate some warmup matrices
             var a_warmup = Enumerable.Range(0, WarmupCount).Select(x => Matrix.RandomMatrix(M, K, MinValue, MaxValue)).ToArray();
             var b_warmup = Enumerable.Range(0, WarmupCount).Select(x => Matrix.RandomMatrix(K, N, MinValue, MaxValue)).ToArray();
@@ -35,7 +37,7 @@ namespace DotNextNN.ConsoleTest
             var a_slow = a.Select(SlowMatrix.FromMatrix).ToArray();
             var b_slow = b.Select(SlowMatrix.FromMatrix).ToArray();
 
-            Console.WriteLine("Warming up MKL and loops");
+            Console.WriteLine("Warming up OpenBLAS and loops");
 
             // Warm up
             double sum = 0.0d;
@@ -45,7 +47,7 @@ namespace DotNextNN.ConsoleTest
                 sum += result[0, 0];
             }
 
-            Console.WriteLine($"MKL warmup complete, useless sum: {sum}");
+            Console.WriteLine($"OpenBLAS warmup complete, useless sum: {sum}");
 
             sum = 0.0d;
             for (int i = 0; i < WarmupCount; i++)
@@ -56,7 +58,7 @@ namespace DotNextNN.ConsoleTest
 
             Console.WriteLine($"Loops warmup complete, useless sum: {sum}");
 
-            Console.WriteLine("Testing MKL");
+            Console.WriteLine("Testing OpenBLAS");
 
             sum = 0.0d;
             var watch = new Stopwatch();
@@ -68,7 +70,7 @@ namespace DotNextNN.ConsoleTest
             }
             watch.Stop();
 
-            Console.WriteLine($"MKL time: {watch.Elapsed}, useless sum: {sum}");
+            Console.WriteLine($"OpenBLAS time: {watch.Elapsed}, useless sum: {sum}");
 
             Console.WriteLine("Testing loops");
             sum = 0.0d;

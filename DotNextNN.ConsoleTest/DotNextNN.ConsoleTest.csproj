@@ -6,6 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="libopenblas.zip" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <PackageReference Include="CLAP-DotNetCore" Version="4.6.0" />
     </ItemGroup>
 

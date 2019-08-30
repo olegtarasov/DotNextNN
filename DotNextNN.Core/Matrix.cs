@@ -15,7 +15,7 @@ namespace DotNextNN.Core
 
     public class Matrix
     {
-        private static readonly MklBlasBackend _backend = new MklBlasBackend();
+        private static readonly OpenBlasBackend _backend = new OpenBlasBackend();
 
         public readonly int Rows;
         public readonly int Cols;
