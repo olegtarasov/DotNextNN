@@ -27,11 +27,6 @@ namespace DotNextNN.Core.Neural
         public Matrix Cache2 { get; private set; }
 
         /// <summary>
-        /// Momentum cache
-        /// </summary>
-        public Matrix CacheM { get; private set; }
-
-        /// <summary>
         /// Timestep
         /// </summary>
         public int Timestep { get; set; } = 0;
@@ -48,7 +43,6 @@ namespace DotNextNN.Core.Neural
 			Gradient = new Matrix(weight.Rows, weight.Cols);
             Cache1 = new Matrix(weight.Rows, weight.Cols);
             Cache2 = new Matrix(weight.Rows, weight.Cols);
-            CacheM = new Matrix(weight.Rows, weight.Cols);
             Timestep = 0;
 		}
 
@@ -58,7 +52,6 @@ namespace DotNextNN.Core.Neural
 			Gradient = other.Gradient.Clone();
 			Cache1 = other.Cache1.Clone();
             Cache2 = other.Cache2.Clone();
-            CacheM = other.CacheM.Clone();
 		    Timestep = other.Timestep;
 		}
 
@@ -76,7 +69,6 @@ namespace DotNextNN.Core.Neural
 		{
 			Cache1.Clear();
             Cache2.Clear();
-            CacheM.Clear();
 		    Timestep = 0;
 		}
 	}

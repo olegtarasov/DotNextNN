@@ -19,10 +19,10 @@ namespace DotNextNN.ConsoleTest
     internal partial class App
     {
         [Verb]
-        public void TrainMNIST(string path, int epochs = 5)
+        public void TrainMNIST(string path, int epochs)
         {
             const int batchSize = 128;
-            const int hSize = 20;
+            const int hSize = 256;
 
             var errFile = new FileStream($"ERR_{DateTime.Now:dd_MM_yy-HH_mm_ss}.txt", FileMode.Create);
             var testErrFile = new FileStream($"ERR_TEST_{DateTime.Now:dd_MM_yy-HH_mm_ss}.txt", FileMode.Create);
@@ -35,6 +35,8 @@ namespace DotNextNN.ConsoleTest
             var optimizer = new AdamOptimizer();
             var network = new LayeredNet(batchSize,
                 new LinearLayer(trainSet.InputSize, hSize),
+                new SigmoidLayer(hSize),
+                new LinearLayer(hSize, hSize),
                 new SigmoidLayer(hSize),
                 new LinearLayer(hSize, trainSet.TargetSize),
                 new SoftMaxLayer(trainSet.TargetSize));

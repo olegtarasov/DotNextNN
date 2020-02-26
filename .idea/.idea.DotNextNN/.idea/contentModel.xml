@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Projects\DotNextNN" t="IncludeFlat">
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_DotNextNN.-725708824.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="DotNextNN.ConsoleTest" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="App.MatrixTests.cs" t="Include" />
@@ -12,7 +14,7 @@
         <e p="MNISTDataset.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.2" t="Include">
+            <e p="netcoreapp3.0" t="Include">
               <e p="DotNextNN.ConsoleTest.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -39,7 +41,7 @@
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.2" t="Include">
+            <e p="netstandard2.1" t="Include">
               <e p="DotNextNN.Core.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -61,6 +63,5 @@
       <e p="DotNextNN.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
-    <e p="C:\Users\Oleg\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_DotNextNN.-1424846317.00" t="ExcludeRecursive" />
   </component>
 </project>

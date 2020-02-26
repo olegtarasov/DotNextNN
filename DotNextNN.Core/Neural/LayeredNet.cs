@@ -26,7 +26,7 @@ namespace DotNextNN.Core.Neural
                 layer.Initialize(batchSize);
                 if (i == 0)
                     continue;
-               if (layers[i-1].OutputSize != layer.InputSize)
+                if (layers[i-1].OutputSize != layer.InputSize)
                     throw new ArgumentException($"Dimension of layer #{i} and #{i+1} does not agree ({layers[i-1].OutputSize}!={layer.InputSize})!");
             }
             
@@ -65,7 +65,7 @@ namespace DotNextNN.Core.Neural
 
         public Matrix BackPropagate(Matrix target, bool needInputSens = false)
         {  
-            Matrix prop = OutLayer.ErrorPropagate(target);
+            var prop = OutLayer.ErrorPropagate(target);
             if (_layersList.Count < 2)
                 return prop;
             for (int i = _layersList.Count - 2; i > 0; i--)
