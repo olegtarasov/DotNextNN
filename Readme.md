@@ -12,7 +12,7 @@ You can also run matrix dot product test with
 ./DotNextNN.ConsoleTest CompareBlasWithLoops
 ```
 
-### OopenBLAS on MacOs
+### OpenBLAS on MacOs
 
 You can install OpenBLAS on MacOs with
 
